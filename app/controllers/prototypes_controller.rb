@@ -15,10 +15,10 @@ class PrototypesController < ApplicationController
   end
 
 
+
   def show
-    @prototype = Prototype.find(params[:id])
     @comment = Comment.new
-    @comments = @prototype.comments.includes(:user)
+    @comments = @prototype.comments
   end
 
 
@@ -27,13 +27,12 @@ class PrototypesController < ApplicationController
   end
 
   def edit
-    @prototype = Prototype.find(params[:id])
   end
 
   def update
-    @prototype = Prototype.find(params[:id])
-    if @prototype.update(prototype_params)
-      redirect_to root_path
+   
+    if@prototype.update(prototype_params)
+      redirect_to prototype_path(@prototype)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,16 +44,17 @@ class PrototypesController < ApplicationController
     if @prototype.save
       redirect_to root_path
     else
-      render :index, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
- def destroy
-  @prototype = Prototype.find(params[:id])
-  @prototype.destroy
-  redirect_to root_path
- end
-
+  def destroy
+    if @prototype.destroy
+      redirect_to root_path
+    else
+      redirect_to root_path
+    end
+  end
 
   
   
